@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Link, Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import "./App.css";
+import CustomHookComp from "./Components/HooksUsages/CustomHookComp";
+import AboutUs from "./Components/AboutUs";
+import PageNotFound from "./Components/PageNotFound";
+import Home from "./Components/Home";
+import MemoHookComp from "./Components/HooksUsages/MemoHookComp";
+import CallBackComp from "./Components/HooksUsages/CallBackComp";
+import LayoutEffectComp from "./Components/HooksUsages/LayoutEffectComp";
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const navigate = useNavigate();
+  const buttonClickHandler = () => {
+    console.log("button clicked");
+    navigate("/custom-hook");
+  };
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+      <nav
+        style={{
+          padding: "20px",
+          background: "#868f43",
+          display: "flex",
+          gap: 10,
+        }}
+      >
+        <Link to="/">
+          <button>Home</button>
+        </Link>
+        <Link to="/about-us">
+          <button> AboutUs</button>
+        </Link>
+        <button type="button" onClick={buttonClickHandler}>
+          CustomHook
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+        <Link to="/hooks/use-memo">
+          <button> Use Memo</button>
+        </Link>
+        <Link to="/hooks/use-callback">
+          <button> Use CallBack</button>
+        </Link>
+        <Link to="/hooks/use-layout-effect">
+          <button> Use LayoutEffect</button>
+        </Link>
+      </nav>
+      <Routes>
+        <Route path="/" element={<Home />}></Route>
+        <Route path="/custom-hook" element={<CustomHookComp />}></Route>
+        <Route path="/about-us" element={<AboutUs />}></Route>
+        <Route path="/hooks">
+          <Route path="use-memo" element={<MemoHookComp />} />
+          <Route path="use-callback" element={<CallBackComp />} />
+          <Route path="use-layout-effect" element={<LayoutEffectComp />} />
+        </Route>
+        <Route path="/not-found" element={<PageNotFound />} />
+        <Route path="*" element={<Navigate to="/not-found" replace />}></Route>
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
