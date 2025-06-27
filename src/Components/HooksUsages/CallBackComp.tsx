@@ -18,9 +18,18 @@ const CallBackComp = () => {
       <h2>Simple useCallback Example</h2>
       <p>Count: {count1}</p>
       <p>Count2: {count2}</p>
-      <button onClick={() => setCount1(count1 + 1)}>Increment Count1</button>
       <button
-        style={{ marginLeft: "10px" }}
+        style={{ backgroundColor: "purple", color: "white" }}
+        onClick={() => setCount1(count1 + 1)}
+      >
+        Increment Count1
+      </button>
+      <button
+        style={{
+          backgroundColor: "purple",
+          color: "white",
+          marginLeft: "10px",
+        }}
         onClick={() => setCount2(count2 + 1)}
       >
         Increment Count2

@@ -7,6 +7,7 @@ export default function CustomHookComp() {
       <h1 style={{marginBottom:"10px"}}>Custom Hook Usage</h1>
       <button
         type="button"
+        style={{backgroundColor:"purple", color:"white"}}
         onClick={() => toggle()}
       >
         {value ? "OFF": "ON"}

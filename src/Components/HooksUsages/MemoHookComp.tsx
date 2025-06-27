@@ -40,7 +40,11 @@ export default function MemoHookComp() {
       </ul>
 
       <p style={{ color: "black" }}>Count: {count}</p>
-      <button type="button" onClick={() => setCount(count + 1)}>
+      <button
+        type="button"
+        style={{ backgroundColor: "purple", color: "white" }}
+        onClick={() => setCount(count + 1)}
+      >
         Increment Count
       </button>
     </div>
