@@ -1,119 +1,193 @@
-import { Box, Button, TextField } from "@mui/material";
-import { useState } from "react";
+import {
+  Box,
+  Button,
+  Snackbar,
+  TextField,
+  Typography,
+  type SnackbarCloseReason,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import userService from "../../Services/UserService";
-import type { IUser } from "../../Services/UserModel";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
+import * as Yup from "yup";
+import { Formik } from "formik";
+import { useState } from "react";
+
+interface UserValues {
+  userName: string;
+  email: string;
+  dob: string;
+}
 
 const UserAdd = () => {
-  const [user, setUser] = useState<IUser>();
   const navigate = useNavigate();
+  const [toast, setToast] = useState({ open: false, message: "" });
+  const UserValidationSchema = Yup.object().shape({
+    userName: Yup.string()
+      .trim()
+      .test("charTest", "Wrong Input 'd' not allowed", (val) => {
+        if (val?.toLowerCase().includes("d")) return false;
+        return true;
+      })
+      .min(5, "Minimum 5 characters are required")
+      .max(20, "Maximum 20 characters are allowed")
+      .required("Username is required"),
+    email: Yup.string()
+      .trim()
+      .email("Invalid email address")
+      .required("Email is required"),
+    dob: Yup.string().required("Date of Birth is required"),
+  });
 
-  const handleSubmit = () => {
-    if (!user) return alert("please fill details");
-    if (user?.userName.trim() === "") {
-      alert("Username is required");
-      return;
+  const handleUserAdd = (values: UserValues) => {
+    const isAdded = userService.create(
+      values?.userName,
+      values?.email,
+      values?.dob
+    );
+    if (isAdded) {
+      alert("User Added Successfully.");
+      navigate("/users");
+    } else {
+      setToast({ open: true, message: "User Already Exists." });
     }
-    if (!user?.email || user?.email.trim() === "") {
-      alert("email is required");
-      return;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (user?.email && !emailRegex.test(user?.email)) {
-      alert("Please enter a valid email address");
+  };
+
+  const initialValues: UserValues = {
+    userName: "",
+    email: "",
+    dob: "",
+  };
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
+    if (reason === "clickaway") {
       return;
     }
 
-    if (!user?.dob || user?.dob === "") {
-      alert("Dob is required");
-      return;
-    }
-    if (user) {
-      let isAdded = userService.create(user?.userName, user?.email, user?.dob);
-      if (isAdded) {
-        alert("UserAdded");
-        navigate("/users");
-      } else {
-        alert("duplicate username");
-      }
-    }
+    setToast({ open: false, message: "" });
   };
 
   return (
     <Box>
-      User Add
-      <form>
-        <Box
-          component="form"
-          className="flex flex-col bg-amber-100 items-center gap-2"
-          sx={{
-            "& > :not(style)": { m: 1, width: "25ch" },
-            padding: "10px",
-          }}
-          noValidate
-          autoComplete="off"
+      <Snackbar
+        open={toast.open}
+        onClose={handleClose}
+        autoHideDuration={3000}
+        message={toast.open ? toast.message : ""}
+      />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          padding: "10px",
+          backgroundColor: "grey",
+        }}
+      >
+        <Typography
+          variant="h4"
+          className="flex text-center justify-center text-amber-50"
         >
-          <TextField
-            id="outlined-basic"
-            label="UserName"
-            variant="outlined"
-            value={user?.userName}
-            onChange={(e) => {
-              const newUserName = e.target.value;
-              setUser((prev) =>
-                prev
-                  ? { ...prev, userName: newUserName }
-                  : ({ userName: newUserName } as IUser)
-              );
-            }}
-          />
-          <TextField
-            id="outlined-basic"
-            label="Email"
-            variant="outlined"
-            value={user?.email}
-            onChange={(e) => {
-              const newEmail = e.target.value;
-              setUser((prev) =>
-                prev
-                  ? { ...prev, email: newEmail }
-                  : ({ email: newEmail } as IUser)
-              );
-            }}
-          />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Box>
-              <DatePicker
-                label="Date of Birth"
-                value={user?.dob ? dayjs(user.dob) : null}
-                defaultValue={null}
-                disableFuture
-                onChange={(newValue) => {
-                  const dobString = newValue
-                    ? newValue.format("YYYY-MM-DD")
-                    : "";
-                  setUser((prev) =>
-                    prev
-                      ? { ...prev, dob: dobString }
-                      : ({ dob: dobString } as IUser)
-                  );
+          User Add
+        </Typography>
+        <Button
+          variant="outlined"
+          className="!bg-amber-100 "
+          onClick={() => navigate("/users")}
+        >
+          Back
+        </Button>
+      </Box>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={UserValidationSchema}
+        onSubmit={(values) => handleUserAdd(values)}
+      >
+        {({
+          setFieldValue,
+          values,
+          errors,
+          handleSubmit,
+          touched,
+          resetForm,
+        }) => {
+          return (
+            <form onSubmit={handleSubmit}>
+              <Box
+                className="flex flex-col bg-amber-100 items-center gap-2"
+                sx={{
+                  "& > :not(style)": { m: 1, width: "25ch" },
+                  padding: "10px",
                 }}
-              />
-            </Box>
-          </LocalizationProvider>
+              >
+                <TextField
+                  id="outlined-basic"
+                  label="UserName"
+                  variant="outlined"
+                  value={values.userName}
+                  onChange={(e) => {
+                    setFieldValue("userName", e.target.value);
+                  }}
+                  error={touched.userName && Boolean(errors.userName)}
+                  helperText={touched.userName && errors.userName}
+                />
+                <TextField
+                  id="outlined-basic"
+                  label="Email"
+                  variant="outlined"
+                  value={values.email}
+                  onChange={(e) => {
+                    setFieldValue("email", e.target.value);
+                  }}
+                  error={touched.email && Boolean(errors.email)}
+                  helperText={touched.email && errors.email}
+                />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Date of Birth"
+                    value={values.dob ? dayjs(values.dob) : null}
+                    defaultValue={null}
+                    disableFuture
+                    onChange={(newValue) => {
+                      const dobString = newValue
+                        ? newValue.format("YYYY-MM-DD")
+                        : "";
+                      setFieldValue("dob", dobString);
+                    }}
+                    slotProps={{
+                      textField: {
+                        readOnly: true,
+                        id: "dob",
+                        name: "dob",
+                        error: touched.dob && Boolean(errors.dob),
+                        helperText: touched.dob && errors.dob,
+                      },
+                    }}
+                  />
+                </LocalizationProvider>
 
-          <Button
-            style={{ backgroundColor: "black", color: "white" }}
-            type="button"
-            onClick={handleSubmit}
-          >
-            Submit
-          </Button>
-        </Box>
-      </form>
+                <Button
+                  style={{ backgroundColor: "black", color: "white" }}
+                  type="submit"
+                >
+                  Submit
+                </Button>
+                <Button
+                  style={{ backgroundColor: "cyan", color: "black" }}
+                  type="button"
+                  onClick={() => resetForm()}
+                >
+                  Reset Form
+                </Button>
+              </Box>
+            </form>
+          );
+        }}
+      </Formik>
     </Box>
   );
 };

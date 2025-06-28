@@ -23,13 +23,6 @@ const AboutUs = () => {
       alert("Please enter a valid email address");
       return;
     }
-
-    const obj = {
-      userName: userName,
-      email: email,
-      message: message,
-    };
-    console.log("Form Values:", obj);
     setUserName("");
     setEmail("");
     setMessage("");

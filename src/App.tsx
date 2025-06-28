@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import CustomHookComp from "./Components/HooksUsages/CustomHookComp";
 import AboutUs from "./Components/AboutUs";
@@ -13,11 +13,11 @@ import UserEdit from "./Pages/UserCrud/UserEdit";
 import UserAdd from "./Pages/UserCrud/UserAdd";
 
 function App() {
-  const navigate = useNavigate();
-  const buttonClickHandler = () => {
-    console.log("button clicked");
-    navigate("/custom-hook");
-  };
+  // const navigate = useNavigate();
+  // const buttonClickHandler = () => {
+  //   console.log("button clicked");
+  //   navigate("/custom-hook");
+  // };
   return (
     <>
       {/* <nav

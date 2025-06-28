@@ -41,7 +41,7 @@ const UserList = () => {
       <Button
         onClick={handleAdd}
         variant="outlined"
-        className="!p-3 !m-2 !bg-amber-50 !border-2 !border-blue-500 !text-xl"
+        className="!py-2 !bg-amber-50 !border-2 !border-blue-500 !text-xl !mb-2 !px-5"
       >
         Add
       </Button>
@@ -49,19 +49,34 @@ const UserList = () => {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead className="!bg-amber-200">
             <TableRow>
-              <TableCell align="center" className="!text-lg !text-blue-700">
+              <TableCell
+                align="center"
+                className="!text-lg !text-blue-700 !font-bold"
+              >
                 Id
               </TableCell>
-              <TableCell align="center" className="!text-lg !text-blue-700">
+              <TableCell
+                align="center"
+                className="!text-lg !text-blue-700 !font-bold"
+              >
                 UserName
               </TableCell>
-              <TableCell align="center" className="!text-lg !text-blue-700">
+              <TableCell
+                align="center"
+                className="!text-lg !text-blue-700 !font-bold"
+              >
                 Email
               </TableCell>
-              <TableCell align="center" className="!text-lg !text-blue-700">
+              <TableCell
+                align="center"
+                className="!text-lg !text-blue-700 !font-bold"
+              >
                 DOB
               </TableCell>
-              <TableCell align="center" className="!text-lg !text-blue-700">
+              <TableCell
+                align="center"
+                className="!text-lg !text-blue-700 !font-bold"
+              >
                 Actions
               </TableCell>
             </TableRow>
