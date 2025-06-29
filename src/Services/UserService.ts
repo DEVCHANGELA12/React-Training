@@ -6,23 +6,31 @@ let userArr: IUser[] = [
     userName: "Dev Changela",
     email: "dev123@gmail.com",
     dob: "2001-05-20",
+    gender: "Male",
   },
   {
     id: 2,
     userName: "Harsh Patel",
     email: "harsh123@gmail.com",
     dob: "2001-05-23",
+    gender: "Others",
   },
   {
     id: 3,
     userName: "Vasu Changela",
     email: "vasu123@gmail.com",
     dob: "2001-08-20",
+    gender: "Male",
   },
 ];
 
 export class UserService {
-  create = (userName: string, email: string, dob: string): boolean => {
+  create = (
+    userName: string,
+    email: string,
+    dob: string,
+    gender: string
+  ): boolean => {
     const isDuplicate = userArr.some(
       (user) => user.userName.toLowerCase() === userName.toLowerCase()
     );
@@ -31,7 +39,13 @@ export class UserService {
       return false;
     }
     const newId = userArr.length + 1;
-    userArr.push({ id: newId, userName: userName, email: email, dob: dob });
+    userArr.push({
+      id: newId,
+      userName: userName,
+      email: email,
+      dob: dob,
+      gender: gender,
+    });
     return true;
   };
 
@@ -47,15 +61,17 @@ export class UserService {
     id: number,
     newEmail: string,
     newUserName: string,
-    newDob: string
+    newDob: string,
+    newGender: string
   ): IUser => {
-    let userIndex = userArr.findIndex((x) => x.id === id);
+    const userIndex = userArr.findIndex((x) => x.id === id);
     if (userIndex >= 0) {
       userArr[userIndex] = {
         id,
         email: newEmail,
         userName: newUserName,
         dob: newDob,
+        gender: newGender,
       };
       return userArr[userIndex];
     }

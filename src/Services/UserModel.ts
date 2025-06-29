@@ -3,4 +3,7 @@ export interface IUser {
     userName: string;
     email: string;
     dob: string;
+    gender: string;
 }
+
+export const GenderMenu = ["Male", "Female", "Others"];

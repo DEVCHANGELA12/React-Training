@@ -1,14 +1,13 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import userService from "../../Services/UserService";
-import type { IUser } from "../../Services/UserModel";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { GenderMenu, type IUser } from "../../Services/UserModel";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import GenTextField from "../../GenericComponents/GenTextField";
+import GenDateField from "../../GenericComponents/GenDateField";
+import GenSelectField from "../../GenericComponents/GenSelectField";
 
 const UserEdit = () => {
   const { id } = useParams();
@@ -17,6 +16,7 @@ const UserEdit = () => {
     userName: "",
     email: "",
     dob: "",
+    gender: "Male",
   });
   const navigate = useNavigate();
 
@@ -44,7 +44,8 @@ const UserEdit = () => {
         Number(id),
         values?.email,
         values?.userName,
-        values?.dob
+        values?.dob,
+        values?.gender
       );
     navigate("/users");
   };
@@ -89,7 +90,15 @@ const UserEdit = () => {
                   padding: "10px",
                 }}
               >
-                <TextField
+                <GenTextField
+                  label="User Name"
+                  valueType="userName"
+                  value={values.userName}
+                  setFieldValue={setFieldValue}
+                  touched={touched.userName}
+                  errors={errors?.userName}
+                />
+                {/* <TextField
                   id="outlined-basic"
                   label="UserName"
                   variant="outlined"
@@ -99,8 +108,17 @@ const UserEdit = () => {
                   }}
                   error={touched.userName && Boolean(errors.userName)}
                   helperText={touched.userName && errors.userName}
+                /> */}
+
+                <GenTextField
+                  label="Email"
+                  valueType="email"
+                  value={values.email}
+                  setFieldValue={setFieldValue}
+                  touched={touched.email}
+                  errors={errors?.email}
                 />
-                <TextField
+                {/* <TextField
                   id="outlined-basic"
                   label="Email"
                   variant="outlined"
@@ -110,8 +128,17 @@ const UserEdit = () => {
                   }}
                   error={touched.email && Boolean(errors.email)}
                   helperText={touched.email && errors.email}
+                /> */}
+
+                <GenDateField
+                  label="Date Of Birth"
+                  valueType="dob"
+                  value={values.dob}
+                  errors={errors.dob}
+                  setFieldValue={setFieldValue}
+                  touched={touched.dob}
                 />
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
                     label="Date of Birth"
                     value={values?.dob ? dayjs(values.dob) : null}
@@ -133,7 +160,15 @@ const UserEdit = () => {
                       },
                     }}
                   />
-                </LocalizationProvider>
+                </LocalizationProvider> */}
+
+                <GenSelectField
+                  label="Gender"
+                  fieldType="gender"
+                  value={values.gender}
+                  menuList={GenderMenu}
+                  setFieldValue={setFieldValue}
+                />
 
                 <Button
                   style={{ backgroundColor: "black", color: "white" }}

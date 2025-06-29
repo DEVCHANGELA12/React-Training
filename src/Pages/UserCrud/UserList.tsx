@@ -77,46 +77,62 @@ const UserList = () => {
                 align="center"
                 className="!text-lg !text-blue-700 !font-bold"
               >
+                Gender
+              </TableCell>
+              <TableCell
+                align="center"
+                className="!text-lg !text-blue-700 !font-bold"
+              >
                 Actions
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {userList.map((row) => (
-              <TableRow
-                key={row.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row" align="center">
-                  {row.id}
-                </TableCell>
-                <TableCell align="center">{row.userName}</TableCell>
-                <TableCell align="center">{row.email}</TableCell>
-                <TableCell align="center">
-                  {moment(row.dob).format("DD MMM yyyy")}
-                </TableCell>
-                <TableCell align="center" className="flex">
-                  <Button
-                    variant="outlined"
-                    type="button"
-                    onClick={() => navigate(`/user/${row.id}`)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    type="button"
-                    sx={{ marginLeft: "10px" }}
-                    onClick={() => {
-                      userService.deleteUser(row.id);
-                      setUserList(userService.allUsers());
-                    }}
-                  >
-                    Delete
-                  </Button>
+            {userList.length > 0 &&
+              userList.map((row) => (
+                <TableRow
+                  key={row.id}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
+                  <TableCell component="th" scope="row" align="center">
+                    {row.id}
+                  </TableCell>
+                  <TableCell align="center">{row.userName}</TableCell>
+                  <TableCell align="center">{row.email}</TableCell>
+                  <TableCell align="center">
+                    {moment(row.dob).format("DD MMM yyyy")}
+                  </TableCell>
+                  <TableCell align="center">{row.gender}</TableCell>
+                  <TableCell align="center" className="flex">
+                    <Button
+                      variant="outlined"
+                      type="button"
+                      onClick={() => navigate(`/user/${row.id}`)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      type="button"
+                      sx={{ marginLeft: "10px" }}
+                      onClick={() => {
+                        userService.deleteUser(row.id);
+                        setUserList(userService.allUsers());
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            {userList.length === 0 && (
+              <TableRow>
+                <TableCell align="center" colSpan={6}>
+                  {" "}
+                  No Record Found
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
