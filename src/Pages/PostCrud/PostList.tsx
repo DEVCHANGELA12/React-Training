@@ -11,34 +11,23 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import userService from "../../Services/UserService/UserService";
-import type { IUser } from "../../Services/UserService/UserModel";
 import { useNavigate } from "react-router-dom";
-import moment from "moment";
 import postService from "../../Services/PostService/PostService";
+import type { IPost } from "../../Services/PostService/PostModel";
 
-const UserList = () => {
-  const [userList, setUserList] = useState<IUser[]>([]);
+const PostList = () => {
+  const [userList, setUserList] = useState<IPost[]>([]);
   const navigate = useNavigate();
   useEffect(() => {
     postService.getAll().then((res) => {
       if (res.status === 200 || res.status === 201) {
-        setUserList(userService.allUsers());
+        setUserList(res.data ?? []);
       }
     });
   }, []);
 
   const handleAdd = () => {
     navigate("/user/add");
-  };
-
-  const handleDelete = (id: number) => {
-    postService.delete(id).then((res) => {
-      if (res.status === 200 || res.status === 201) {
-        userService.deleteUser(id);
-        setUserList(userService.allUsers());
-      }
-    });
   };
 
   return (
@@ -51,7 +40,7 @@ const UserList = () => {
       }}
     >
       <Typography variant="h4" className="flex text-center justify-center">
-        UserList
+        PostList
       </Typography>
       <Button
         onClick={handleAdd}
@@ -74,26 +63,23 @@ const UserList = () => {
                 align="center"
                 className="!text-lg !text-blue-700 !font-bold"
               >
-                UserName
+                UserId
               </TableCell>
               <TableCell
                 align="center"
                 className="!text-lg !text-blue-700 !font-bold"
+                style={{ width: "400px" }}
               >
-                Email
+                Title
               </TableCell>
               <TableCell
                 align="center"
                 className="!text-lg !text-blue-700 !font-bold"
+                style={{ width: "550px" }}
               >
-                DOB
+                Body
               </TableCell>
-              <TableCell
-                align="center"
-                className="!text-lg !text-blue-700 !font-bold"
-              >
-                Gender
-              </TableCell>
+
               <TableCell
                 align="center"
                 className="!text-lg !text-blue-700 !font-bold"
@@ -112,12 +98,10 @@ const UserList = () => {
                   <TableCell component="th" scope="row" align="center">
                     {row.id}
                   </TableCell>
-                  <TableCell align="center">{row.userName}</TableCell>
-                  <TableCell align="center">{row.email}</TableCell>
-                  <TableCell align="center">
-                    {moment(row.dob).format("DD MMM yyyy")}
-                  </TableCell>
-                  <TableCell align="center">{row.gender}</TableCell>
+                  <TableCell align="center">{row.userId}</TableCell>
+                  <TableCell align="center">{row.title}</TableCell>
+                  <TableCell align="center">{row.body}</TableCell>
+
                   <TableCell align="center" className="flex">
                     <Button
                       variant="outlined"
@@ -130,7 +114,10 @@ const UserList = () => {
                       variant="outlined"
                       type="button"
                       sx={{ marginLeft: "10px" }}
-                      onClick={() => handleDelete(row.id)}
+                      //   onClick={() => {
+                      //     userService.deleteUser(row.id);
+                      //     setUserList(userService.allUsers());
+                      //   }}
                     >
                       Delete
                     </Button>
@@ -152,4 +139,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default PostList;

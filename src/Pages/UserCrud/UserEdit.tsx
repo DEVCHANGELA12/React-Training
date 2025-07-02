@@ -1,13 +1,16 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import userService from "../../Services/UserService";
-import { GenderMenu, type IUser } from "../../Services/UserModel";
+import userService from "../../Services/UserService/UserService";
+import { GenderMenu, type IUser } from "../../Services/UserService/UserModel";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import GenTextField from "../../GenericComponents/GenTextField";
 import GenDateField from "../../GenericComponents/GenDateField";
 import GenSelectField from "../../GenericComponents/GenSelectField";
+import postService, {
+  type UpdatePayload,
+} from "../../Services/PostService/PostService";
 
 const UserEdit = () => {
   const { id } = useParams();
@@ -34,20 +37,35 @@ const UserEdit = () => {
   });
 
   useEffect(() => {
-    const userDetail = userService.getUserDetail(Number(id));
-    if (userDetail) setUser(userDetail);
+    postService.getById(Number(id)).then((res) => {
+      if (res.status === 200 || res.status === 201) {
+        const userDetail = userService.getUserDetail(Number(id));
+        if (userDetail) setUser(userDetail);
+      }
+    });
   }, [id]);
 
   const handleUserUpdate = (values: IUser) => {
-    if (values)
-      userService.updateUser(
-        Number(id),
-        values?.email,
-        values?.userName,
-        values?.dob,
-        values?.gender
-      );
-    navigate("/users");
+    const payload: UpdatePayload = {
+      id: 1,
+      userId: 1,
+      body: "abcde",
+      title: "Hii Dev",
+    };
+    postService.update(payload).then((res) => {
+      if (res.status === 200 || res.status === 201) {
+        if (values) {
+          userService.updateUser(
+            Number(id),
+            values?.email,
+            values?.userName,
+            values?.dob,
+            values?.gender
+          );
+        }
+      }
+      navigate("/users");
+    });
   };
 
   return (

@@ -16,13 +16,13 @@ interface IGenSelectFieldProps {
 }
 
 const GenSelectField = (props: IGenSelectFieldProps) => {
-  const { label, fieldType, value, menuList, setFieldValue } =
-    props;
+  const { label, fieldType, value, menuList, setFieldValue } = props;
   return (
-    <div>
+    <div style={{ width: "25%" }}>
       <FormControl fullWidth>
         <InputLabel id={`${label}-${fieldType}`}>{label}</InputLabel>
         <Select
+          fullWidth
           labelId={`${label}-${fieldType}`}
           id="select-label"
           value={value}

@@ -11,6 +11,9 @@ import InsertionEffectComp from "./Components/HooksUsages/InsertionEffectComp";
 import UserList from "./Pages/UserCrud/UserList";
 import UserEdit from "./Pages/UserCrud/UserEdit";
 import UserAdd from "./Pages/UserCrud/UserAdd";
+import PostList from "./Pages/PostCrud/PostList";
+import ParentComp from "./Components/ContextAPI/ParentComp";
+import ReduxComp from "./Components/Redux/ReduxComp";
 
 function App() {
   // const navigate = useNavigate();
@@ -57,9 +60,15 @@ function App() {
         <Route path="/" element={<Home />}></Route>
         <Route path="/custom-hook" element={<CustomHookComp />}></Route>
         <Route path="/about-us" element={<AboutUs />}></Route>
+        
         <Route path="/users" element={<UserList />}></Route>
         <Route path="/user/:id" element={<UserEdit />}></Route>
         <Route path="/user/add" element={<UserAdd />}></Route>
+
+        <Route path="/posts" element={<PostList />}></Route>
+        <Route path="/posts/:id" element={<UserEdit />}></Route>
+        <Route path="/posts/add" element={<UserAdd />}></Route>
+        
         <Route path="/hooks">
           <Route path="use-memo" element={<MemoHookComp />} />
           <Route path="use-callback" element={<CallBackComp />} />
@@ -69,6 +78,9 @@ function App() {
             element={<InsertionEffectComp />}
           />
         </Route>
+
+        <Route path="/context" element={<ParentComp />} />
+        <Route path="/redux" element={<ReduxComp />} />
         <Route path="/not-found" element={<PageNotFound />} />
         <Route path="*" element={<Navigate to="/not-found" replace />}></Route>
       </Routes>

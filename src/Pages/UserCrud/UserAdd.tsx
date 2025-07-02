@@ -6,14 +6,17 @@ import {
   type SnackbarCloseReason,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import userService from "../../Services/UserService";
+import userService from "../../Services/UserService/UserService";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { useState } from "react";
 import GenTextField from "../../GenericComponents/GenTextField";
 import GenDateField from "../../GenericComponents/GenDateField";
 import GenSelectField from "../../GenericComponents/GenSelectField";
-import { GenderMenu } from "../../Services/UserModel";
+import { GenderMenu } from "../../Services/UserService/UserModel";
+import postService, {
+  type UpdatePayload,
+} from "../../Services/PostService/PostService";
 
 export interface UserValues {
   userName: string;
@@ -43,18 +46,28 @@ const UserAdd = () => {
   });
 
   const handleUserAdd = (values: UserValues) => {
-    const isAdded = userService.create(
-      values?.userName,
-      values?.email,
-      values?.dob,
-      values?.gender,
-    );
-    if (isAdded) {
-      alert("User Added Successfully.");
-      navigate("/users");
-    } else {
-      setToast({ open: true, message: "User Already Exists." });
-    }
+    const payload: UpdatePayload = {
+      id: 1,
+      userId: 1,
+      body: "abcde",
+      title: "Hii Dev",
+    };
+    postService.add(payload).then((res) => {
+      if (res.status === 200 || res.status === 201) {
+        const isAdded = userService.create(
+          values?.userName,
+          values?.email,
+          values?.dob,
+          values?.gender
+        );
+        if (isAdded) {
+          alert("User Added Successfully.");
+          navigate("/users");
+        } else {
+          setToast({ open: true, message: "User Already Exists." });
+        }
+      }
+    });
   };
 
   const initialValues: UserValues = {
@@ -121,7 +134,7 @@ const UserAdd = () => {
           return (
             <form onSubmit={handleSubmit}>
               <Box
-                className="flex flex-col bg-amber-100 items-center gap-2"
+                className="flex flex-col bg-amber-100 items-center gap-2 !min-h-full"
                 sx={{
                   "& > :not(style)": { m: 1, width: "25ch" },
                   padding: "10px",
@@ -206,19 +219,27 @@ const UserAdd = () => {
                   setFieldValue={setFieldValue}
                 />
 
-                <Button
-                  style={{ backgroundColor: "black", color: "white" }}
-                  type="submit"
-                >
-                  Submit
-                </Button>
-                <Button
-                  style={{ backgroundColor: "cyan", color: "black" }}
-                  type="button"
-                  onClick={() => resetForm()}
-                >
-                  Reset Form
-                </Button>
+                <Box sx={{ width: "25%", display: "flex" }}>
+                  <Button
+                    style={{ backgroundColor: "black", color: "white" }}
+                    type="submit"
+                    fullWidth
+                  >
+                    Submit
+                  </Button>
+                  <Button
+                    fullWidth
+                    style={{
+                      backgroundColor: "cyan",
+                      color: "black",
+                      marginLeft: "15px",
+                    }}
+                    type="button"
+                    onClick={() => resetForm()}
+                  >
+                    Reset Form
+                  </Button>
+                </Box>
               </Box>
             </form>
           );

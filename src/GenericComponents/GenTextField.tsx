@@ -19,8 +19,9 @@ interface IGenTextFieldProps {
 const GenTextField = (props: IGenTextFieldProps) => {
   const { label, value, valueType, touched, setFieldValue, errors } = props;
   return (
-    <div>
+    <div style={{ width: "25%" }}>
       <TextField
+        fullWidth
         id={label}
         label={label}
         variant="outlined"

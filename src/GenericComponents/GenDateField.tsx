@@ -20,7 +20,7 @@ interface IGenDateFieldProps {
 const GenDateField = (props: IGenDateFieldProps) => {
   const { label, valueType, value, setFieldValue, touched, errors } = props;
   return (
-    <div>
+    <div style={{ width: "25%" }}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker
           label={label}
@@ -33,6 +33,7 @@ const GenDateField = (props: IGenDateFieldProps) => {
           }}
           slotProps={{
             textField: {
+              fullWidth: true,
               readOnly: true,
               id: valueType,
               name: valueType,
